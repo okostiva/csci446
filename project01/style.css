@@ -1,3 +1,37 @@
+html {
+    background: #aaaaaa;
+}
+
+body {
+    background: #fafafa;
+    font-family: Arial;
+    width: 95%;
+    border: 1px solid #000000;
+    margin: auto;
+    font-weight: lighter;
+    min-height: 100px;
+}
+
+header {
+    background: #c8c8c8;
+}
+
+header p {
+    color: #82878d;
+    margin: -6px 0px 0px 0px;
+    padding: 0px 0px 6px 6px;  
+    font-size: 13px;
+    font-weight: lighter;
+}
+
+h1 {
+    letter-spacing: -2px;
+    font-weight: 900;
+    font-size: 34px;
+    padding: 6px 0px 0px 6px;
+    margin: 0;
+}
+
 div#navbar { 
    background: #000000; 
    width: 100%; 
@@ -29,3 +63,4 @@ div#navbar ul a:hover{
    padding: 10px 10px 10px 0px;
    color: #2aa8db; 
 }
+
