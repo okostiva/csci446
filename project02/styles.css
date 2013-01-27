@@ -1,0 +1,15 @@
+h1 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+#rank {
+    width: 175px;
+}
+
+select {
+    margin-right: 20px;
+}
