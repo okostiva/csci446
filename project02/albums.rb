@@ -6,49 +6,77 @@ class AlbumApp
 	def call(env)
 		request = Rack::Request.new(env)
 		case request.path
-		when "/form" then render_form(request)
+		when "/form" then render_form
 		when "/list" then render_list(request)
-		when "/styles.css" then render_stylesheet(request)
+		when "/styles.css" then render_stylesheet
 		else render_404
 		end
 	end
 
-	def render_form(request)
-		response = Rack::Response.new
-		
-		finalHTML = ""
+	def render_form
+		formHTML = ""
 
 		File.open("form.html", "rb") do |form|
-			while (line = form.gets)
-				if line.index('<!-- Option Placehoder -->')
+			while (formLine = form.gets)
+				if formLine.index('<!-- Option Placehoder -->')
 					(1..100).each do |rankNum|
-						finalHTML << "<option value='" + rankNum.to_s + "'>" + rankNum.to_s + "</option>\n"
+						formHTML << "<option value='" + rankNum.to_s + "'>" + rankNum.to_s + "</option>\n"
 					end
 				else
-					finalHTML << line.to_s
+					formHTML << formLine.to_s
 				end
 			end
 		end
 
-		response.write(finalHTML)
-		response.finish
+		[200, {"Content-Type" => "text/html"}, [formHTML]]
 	end
 
 	def render_list(request)
-		response = Rack::Response.new(request.path)
-		response.finish
+		listHTML = ""
+		albums = Array.new
+		counter = 1
+
+		File.open("top_100_albums.txt") do |allAlbums|
+			while (albumLine = allAlbums.gets)
+				albumInfo = albumLine.split(', ')
+				tempAlbum = Album.new(counter, albumInfo[0], albumInfo[1])
+				##tempAlbum.initialize(counter, albumInfo[0], albumInfo[1])
+				albums << tempAlbum
+				counter = counter + 1
+			end
+		end
+
+		File.open("list.html", "rb") do |list|
+			while (listLine = list.gets)
+				listHTML << listLine.to_s
+			end
+		end
+
+##		listHTML << albums[0].rank.to_s
+
+		[200, {"Content-Type" => "text/html"}, [listHTML]]
 	end
 
-	def render_stylesheet(request)
-		response = Rack::Response.new
-		File.open("styles.css", "rb") { |styles| response.write(styles.read) }
-		response.finish
+	def render_stylesheet
+		stylesheet = ""
+		File.open("styles.css", "rb") { |styles| stylesheet = styles.read}
+		[200, {"Content-Type" => "text/css"}, [stylesheet]]
 	end
 
 	def render_404
 		[404, {"Content-Type" => "text/plain"}, ["404 - Page Not Found!"]]
 	end
 
+end
+
+class Album
+	attr_reader :rank, :title, :year
+
+	def initialize(rank, title, year)
+		@rank = rank
+		@title = title
+		@year = year
+	end
 end
 
 Rack::Handler::WEBrick.run AlbumApp.new, :Port => 8080
