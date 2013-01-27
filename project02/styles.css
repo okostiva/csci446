@@ -1,3 +1,12 @@
+html {
+    font-family: Arial;
+}
+
+body {
+    margin: auto;
+    width: 850px;
+}
+
 h1 {
     text-align: center;
 }
@@ -12,4 +21,40 @@ form {
 
 select {
     margin-right: 20px;
+}
+
+#body {
+    margin: auto;
+    width: 600px;
+}
+
+.selected {
+    color: #42bc4f;
+}
+
+ul {
+    padding-left: 0px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.title {
+    float: none;
+    text-align: left;
+}
+
+.year {
+    float: right;
+    text-align: left;
+}
+
+.rank {
+    float: left;
+    width: 40px;
+}
+
+.row {
+    width: 90%;
 }
