@@ -38,21 +38,44 @@ class AlbumApp
 
 		File.open("top_100_albums.txt") do |allAlbums|
 			while (albumLine = allAlbums.gets)
-				albumInfo = albumLine.split(', ')
+				albumInfo = albumLine.chomp.split(', ')
 				tempAlbum = Album.new(counter, albumInfo[0], albumInfo[1])
-				##tempAlbum.initialize(counter, albumInfo[0], albumInfo[1])
 				albums << tempAlbum
 				counter = counter + 1
 			end
 		end
 
-		File.open("list.html", "rb") do |list|
-			while (listLine = list.gets)
-				listHTML << listLine.to_s
-			end
+		case request[:order].to_s
+		when "rank"
+		then albums.sort! { |album1, album2| album1.rank.to_i <=> album2.rank.to_i }
+		when "name"
+		then albums.sort! { |album1, album2| album1.title.to_s <=> album2.title.to_s }
+		when "year"
+		then albums.sort! { |album1, album2| album1.year.to_i <=> album2.year.to_i }
 		end
 
-##		listHTML << albums[0].rank.to_s
+		File.open("list.html", "rb") do |list|
+			while (listLine = list.gets)
+				if listLine.index('<!-- List Item Placeholder -->')
+					albums.each do |tempAlbum|
+						if tempAlbum.rank.to_i == request[:rank].to_i
+							listHTML << "<li class='selected'>"
+						else
+							listHTML << "<li>"
+						end
+						listHTML << "<div class='row'>\n"
+						listHTML << "\t<span class='rank'>" + tempAlbum.rank.to_s + "</span>\n"
+						listHTML << "\t<span class='title'>" + tempAlbum.title.to_s + "</span>\n"
+						listHTML << "\t<span class='year'>" + tempAlbum.year.to_s + "</span>\n"
+						listHTML << "</div></li>\n"
+					end
+				elsif listLine.index('<!-- Sort Order Placeholder -->')
+					listHTML << "<p>Sorted by " + request[:order].capitalize.to_s + "</p>"
+				else
+					listHTML << listLine.to_s
+				end
+			end
+		end
 
 		[200, {"Content-Type" => "text/html"}, [listHTML]]
 	end
