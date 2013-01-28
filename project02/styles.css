@@ -32,29 +32,9 @@ select {
     color: #42bc4f;
 }
 
-ul {
-    padding-left: 0px;
-}
-
-li {
-    list-style-type: none;
-}
-
-.title {
-    float: none;
-    text-align: left;
-}
-
-.year {
-    float: right;
-    text-align: left;
-}
-
-.rank {
-    float: left;
-    width: 40px;
-}
-
-.row {
+table {
     width: 90%;
+    text-align: left;
+    border-style: none;
+    border-width: 0px;
 }

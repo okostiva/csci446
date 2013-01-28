@@ -56,21 +56,20 @@ class AlbumApp
 
 		File.open("list.html", "rb") do |list|
 			while (listLine = list.gets)
-				if listLine.index('<!-- List Item Placeholder -->')
+				if listLine.index('<!-- Table Item Placeholder -->')
 					albums.each do |tempAlbum|
 						if tempAlbum.rank.to_i == request[:rank].to_i
-							listHTML << "<li class='selected'>"
+							listHTML << "<tr class='selected'>\n"
 						else
-							listHTML << "<li>"
+							listHTML << "<tr>\n"
 						end
-						listHTML << "<div class='row'>\n"
-						listHTML << "\t<span class='rank'>" + tempAlbum.rank.to_s + "</span>\n"
-						listHTML << "\t<span class='title'>" + tempAlbum.title.to_s + "</span>\n"
-						listHTML << "\t<span class='year'>" + tempAlbum.year.to_s + "</span>\n"
-						listHTML << "</div></li>\n"
+						listHTML << "\t<td>" + tempAlbum.rank.to_s + "</td>\n"
+						listHTML << "\t<td>" + tempAlbum.title.to_s + "</td>\n"
+						listHTML << "\t<td>" + tempAlbum.year.to_s + "</td>\n"
+						listHTML << "</tr>\n"
 					end
 				elsif listLine.index('<!-- Sort Order Placeholder -->')
-					listHTML << "<p>Sorted by " + request[:order].capitalize.to_s + "</p>"
+					listHTML << "<p>Sorted by " + request[:order].capitalize.to_s + "</p>\n"
 				else
 					listHTML << listLine.to_s
 				end
