@@ -1,0 +1,40 @@
+html {
+    font-family: Arial;
+}
+
+body {
+    margin: auto;
+    width: 850px;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+#rank {
+    width: 175px;
+}
+
+select {
+    margin-right: 20px;
+}
+
+#body {
+    margin: auto;
+    width: 600px;
+}
+
+.selected {
+    color: #42bc4f;
+}
+
+table {
+    width: 90%;
+    text-align: left;
+    border-style: none;
+    border-width: 0px;
+}
