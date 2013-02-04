@@ -5,6 +5,13 @@ require 'sqlite3'
 require 'erb'
 
 class AlbumApp
+	#Return a default value of rank so that the query still executes even if the key is not found
+	@@sort_order_hash = Hash.new( "rank" )
+	@@sort_order_hash[:name] = "title"
+	@@sort_order_hash[:year] = "year"
+
+	@@albums = Array.new
+
 	def call(env)
 		request = Rack::Request.new(env)
 		case request.path
@@ -15,57 +22,30 @@ class AlbumApp
 		end
 	end
 
+	def populate_albums_array(order_by)
+		order_column = @@sort_order_hash[order_by]
+
+		db = SQLite3::Database.new( "albums.sqlite3.db" )
+		db.execute( "select rank, title, year from albums order by " + order_column + ";" ) do |row|
+			@@albums << Album.new(row[0], row[1], row[2])
+		end
+	end
+
 	def render_form
 		form_HTML = ERB.new(File.read("form.html.erb")).result()
 		[200, {"Content-Type" => "text/html"}, [form_HTML]]
 	end
 
 	def render_list(request)
-		listHTML = ""
-		albums = Array.new
-		counter = 1
+		selected_rank = request[:rank].to_i
+		order_by = request[:order].to_sym
+		@@albums.clear
 
-		File.open("top_100_albums.txt") do |allAlbums|
-			while (albumLine = allAlbums.gets)
-				albumInfo = albumLine.chomp.split(', ')
-				tempAlbum = Album.new(counter, albumInfo[0], albumInfo[1])
-				albums << tempAlbum
-				counter = counter + 1
-			end
-		end
+		populate_albums_array(order_by)
 
-		case request[:order].to_s
-		when "rank"
-		then albums.sort! { |album1, album2| album1.rank.to_i <=> album2.rank.to_i }
-		when "name"
-		then albums.sort! { |album1, album2| album1.title.to_s <=> album2.title.to_s }
-		when "year"
-		then albums.sort! { |album1, album2| album1.year.to_i <=> album2.year.to_i }
-		end
+		list_HTML = ERB.new(File.read("list.html.erb")).result(binding)
 
-		File.open("list.html", "rb") do |list|
-			while (listLine = list.gets)
-				if listLine.index('<!-- Table Item Placeholder -->')
-					albums.each do |tempAlbum|
-						if tempAlbum.rank.to_i == request[:rank].to_i
-							listHTML << "<tr class='selected'>\n"
-						else
-							listHTML << "<tr>\n"
-						end
-						listHTML << "\t<td>" + tempAlbum.rank.to_s + "</td>\n"
-						listHTML << "\t<td>" + tempAlbum.title.to_s + "</td>\n"
-						listHTML << "\t<td>" + tempAlbum.year.to_s + "</td>\n"
-						listHTML << "</tr>\n"
-					end
-				elsif listLine.index('<!-- Sort Order Placeholder -->')
-					listHTML << "<p>Sorted by " + request[:order].capitalize.to_s + "</p>\n"
-				else
-					listHTML << listLine.to_s
-				end
-			end
-		end
-
-		[200, {"Content-Type" => "text/html"}, [listHTML]]
+		[200, {"Content-Type" => "text/html"}, [list_HTML]]
 	end
 
 	def render_stylesheet
