@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'rack'
+require 'sqlite3'
 
 class AlbumApp
 	def call(env)
