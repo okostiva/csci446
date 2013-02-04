@@ -2,6 +2,7 @@
 
 require 'rack'
 require 'sqlite3'
+require 'erb'
 
 class AlbumApp
 	def call(env)
@@ -15,21 +16,8 @@ class AlbumApp
 	end
 
 	def render_form
-		formHTML = ""
-
-		File.open("form.html", "rb") do |form|
-			while (formLine = form.gets)
-				if formLine.index('<!-- Option Placehoder -->')
-					(1..100).each do |rankNum|
-						formHTML << "<option value='" + rankNum.to_s + "'>" + rankNum.to_s + "</option>\n"
-					end
-				else
-					formHTML << formLine.to_s
-				end
-			end
-		end
-
-		[200, {"Content-Type" => "text/html"}, [formHTML]]
+		form_HTML = ERB.new(File.read("form.html.erb")).result()
+		[200, {"Content-Type" => "text/html"}, [form_HTML]]
 	end
 
 	def render_list(request)
