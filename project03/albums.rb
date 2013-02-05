@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require 'rack'
 require 'sqlite3'
 require 'erb'
