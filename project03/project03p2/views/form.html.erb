@@ -1,30 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Top 100 Albums of All Time - Form</title>
-        <link type="text/css" href="styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <h1>Rolling Stone's Top 100 Albums of All Time</h1>
-        <form action="/list" method="post">
-            <label for="order">Sort By:</label>
-            <select name="order" id="order">
-                <optgroup label="Sort By">
-                    <option value="rank">Rank (default)</option>
-                    <option value="name">Name</option>
-                    <option value="year">Year</option>
-                </optgroup>
-            </select>
-            <label for="rank">Select a Rank to Highlight:</label>
-            <select name="rank" id="rank">
-                <optgroup label="Select a Rank to Highlight">
-				<% (1..100).each do |rankNum| %>
-					<option value="<%= rankNum %>"><%= rankNum %></option>
-				<% end %>
-                </optgroup>
-            </select>
-            <button type="submit">Display List</button>
-        </form>
-    </body>
-</html>
+<form action="/list" method="post">
+    <label for="order">Sort By:</label>
+    <select name="order" id="order">
+        <optgroup label="Sort By">
+            <option value="rank">Rank (default)</option>
+            <option value="name">Name</option>
+            <option value="year">Year</option>
+        </optgroup>
+    </select>
+    <label for="rank">Select a Rank to Highlight:</label>
+    <select name="rank" id="rank">
+        <optgroup label="Select a Rank to Highlight">
+		<% (1..100).each do |rankNum| %>
+			<option value="<%= rankNum %>"><%= rankNum %></option>
+		<% end %>
+        </optgroup>
+    </select>
+    <button type="submit">Display List</button>
+</form>

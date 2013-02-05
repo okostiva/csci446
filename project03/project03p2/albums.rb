@@ -8,7 +8,7 @@ DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/albums.sqlite3.db")
 set :port, 8080
 
 get "/form" do
-	erb :"form.html"
+	erb :"form.html", :layout => :"layout.html"
 end
 
 post "/list" do
@@ -17,5 +17,5 @@ post "/list" do
 	@sort_order_hash[:name] = :title
 	@sort_order_hash[:year] = :year
 	@albums = Album.all(:order => [@sort_order_hash[params[ :order ].to_sym]])
-	erb :"list.html"
+	erb :"list.html", :layout => :"layout.html"
 end

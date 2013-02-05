@@ -1,27 +1,16 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Top 100 Albums of All Time - List</title>
-        <link type="text/css" href="styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <h1>Rolling Stone's Top 100 Albums of All Time</h1>
-        <div id="body">
-            <p>Sorted by <%= params[ :order ].to_s.capitalize %></p>
-            <table>
-				<% @albums.each do |album| %>
-				<% if album.rank == params[ :rank ].to_i %>
-				<tr class="selected">
-				<% else %>
-				<tr>
-				<% end %>
-					<td><%= album.rank %></td>
-					<td><%= album.title %></td>
-					<td><%= album.year %></td>
-				</tr>
-				<% end %>
-            </table>
-        </div>
-    </body>
-</html>
+<div id="body">
+    <p>Sorted by <%= params[ :order ].to_s.capitalize %></p>
+    <table>
+		<% @albums.each do |album| %>
+		<% if album.rank == params[ :rank ].to_i %>
+		<tr class="selected">
+		<% else %>
+		<tr>
+		<% end %>
+			<td><%= album.rank %></td>
+			<td><%= album.title %></td>
+			<td><%= album.year %></td>
+		</tr>
+		<% end %>
+    </table>
+</div>
