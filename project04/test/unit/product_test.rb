@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ProductTest < ActiveSupport::TestCase
+	fixtures :products
+
 	test "product attributes must be defined" do
 		product = Product.new
 		assert product.invalid?
@@ -45,5 +47,26 @@ class ProductTest < ActiveSupport::TestCase
 		bad_images.each do |image_name|
 			assert new_product(image_name).invalid?, "#{image_name} should not have been valid"
 		end
+	end
+	
+	test "product must have a unique title" do
+		product = Product.new(title: 		products(:ruby).title,
+							  description: 	"some description",
+							  price:		1,
+						  	  image_url:	"ruby.png")
+			
+		assert product.invalid?
+		assert_equal ["has already been taken"], product.errors[:title]
+	end
+
+	test "product must have a unique titl i18n" do
+		product = Product.new(title: 		products(:ruby).title,
+							  description: 	"some description",
+							  price:		1,
+						  	  image_url:	"ruby.png")
+			
+		assert product.invalid?
+		assert_equal [I18n.translate('activerecord.errors.messages.taken')], 
+					 product.errors[:title]
 	end
 end
